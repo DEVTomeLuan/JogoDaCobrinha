@@ -58,12 +58,12 @@
 			//VAI CRIAR UM RETANGULO E PINTAR DE PRETO TODA PARTE DO RETANGULO
 			contexto.fillRect(0,0, palco.width, palco.height);
 
-			//DEFINIR A COR DA CABEÇA DA COBRA
+			//DEFINIR A COR DA PRESA DA COBRA
 			contexto.fillStyle = "red";
 			contexto.fillRect(posicaoInicialX*tamanhoPc, posicaoInicialY*tamanhoPc, tamanhoPc,tamanhoPc);
 
 			//DEFINIR A COR DO RASTRO DA COBRA
-			contexto.fillStyle = "gray";
+			contexto.fillStyle = "yellow";
 			for (var i = 0; i < rastro.length; i++) {
 				contexto.fillRect(rastro[i].x*tamanhoPc, rastro[i].y*tamanhoPc
 					, tamanhoPc,tamanhoPc);
