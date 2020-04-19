@@ -7,89 +7,103 @@
 </head>
 <body>
 
-<canvas id="stage" width="400" height="400"></canvas>
+	<!--CRIANDO A TELA DE FUNDO DO JOGO-->
+<canvas id="palco" width="400" height="400"></canvas>
 <script type="text/javascript">
 	
+	//CARREGAMENTO DA JANELA
 	window.onload = function(){
 
-		var stage = document.getElementById('stage');
-		var ctx = stage.getContext("2d");
+		//PASSA O ID PALCO POR PARAMETRO
+		var palco= document.getElementById('palco');
+		//CONTEXTO DO PALCO, ONDE FAREMOS A PARTE VISUAL DO JOGO
+		var contexto = palco.getContext("2d");
 		document.addEventListener("keydown", keyPush);
-		setInterval(game, 60);
 
-		const vel = 1;
+		//DEFINE O INTERVALO PARA A FUNCAO SER CHAMADA, A CADA 60  MILISEGUNDOS A FUNÇÃO SERÁ CHAMADA
+		setInterval(jogo, 60);
 
-		var vx = vy = 0;
-		var px = 10;
-		var py = 15;
-		var tp = 20;
-		var qp = 20;
-		var ax = ay = 15;
+		//QUANTAS CASAS A COBRA VAI ANDAR AO CHAMAR A FUNÇÃO GAME, INICIALMENTE ANDA 1 CASA
+		const velocidade = 1;
 
-		var trail = [];
-		tail = 5;
+		var velocidadeX = velocidadeY = 0;
+		var pontoX = 10;
+		var pontoY = 15;
+		var tamanhoPc = 20;
+		var quantidadePc = 20;
+		var posicaoInicialX = posicaoInicialY = 15;
 
-		function game(){
-			px += vx;
-			py += vy;
-			if(px < 0){
-				px = qp - 1;
+
+		var rastro = [];
+		tamanhoCalda = 5;
+
+		function jogo(){
+			pontoX += velocidadeX;
+			pontoY += velocidadeY;
+			if(pontoX < 0){
+				pontoX = quantidadePc - 1;
 			}
-			if (px > qp - 1){
-				px = 0;
+			if (pontoX > quantidadePc - 1){
+				pontoX = 0;
 			}
-			if (py < 0){
-				py = qp - 1;
+			if (pontoY < 0){
+				pontoY = quantidadePc - 1;
 			}
-			if (py > qp - 1){
-				py = 0;
+			if (pontoY > quantidadePc - 1){
+				pontoY = 0;
 			}
 
-			ctx.fillStyle = "black";
-			ctx.fillRect(0,0, stage.width, stage.height);
+			//DEFINE O PLANO DE FUNDO PRETO
+			contexto.fillStyle = "black";
+			//VAI CRIAR UM RETANGULO E PINTAR DE PRETO TODA PARTE DO RETANGULO
+			contexto.fillRect(0,0, stage.width, palco.height);
 
-			ctx.fillStyle = "red";
-			ctx.fillRect(ax*tp, ay*tp, tp,tp);
+			//DEFINIR A COR DA CABEÇA DA COBRA
+			contexto.fillStyle = "red";
+			contexto.fillRect(posicaoInicialX*tamanhoPc, posicaoInicialY*tamanhoPc, tamanhoPc,tamanhoPc);
 
-			ctx.fillStyle = "gray";
-			for (var i = 0; i < trail.length; i++) {
-				ctx.fillRect(trail[i].x*tp, trail[i].y*tp
-					, tp,tp);
-				if(trail[i].x == px && trail[i].y == py){
-					vx = vy = 0;
+			//DEFINIR A COR DO RASTRO DA COBRA
+			contexto.fillStyle = "gray";
+			for (var i = 0; i < rastro.length; i++) {
+				contexto.fillRect(rastro[i].x*tamanhoPc, rastro[i].y*tamanhoPc
+					, tamanhoPc,tamanhoPc);
+					//SE O RABO BATER NA CALDA, PARA
+				if(rastro[i].x == pontoX && rastro[i].y == pontoY){
+					velocidadeX = velocidadeY = 0;
 				}
 			}
 
-			trail.push({x:px, y:py})
-			while (trail.length > tail){
-				trail.shift();
+			//MOVIMENTO DA COBRA CASO NAO BATA A CABEÇA NA CALDA
+			rastro.push({x:pontoX, y:pontoY})
+			while (rastro.length > tamanhoCalda){
+				rastro.shift();
 			}
 
-			if (ax==px && ay==py){
-				tail++;
-				ax = Math.floor(Math.random()*qp);
-				ay = Math.floor(Math.random()*qp);
+			if (posicaoInicialX==pontoX && posicaoInicialY==pontoY){
+				tamanhoCalda++;
+				posicaoInicialX = Math.floor(Math.random()*quantidadePc);
+				posicaoInicialY = Math.floor(Math.random()*quantidadePc);
 			}
 		}
 
 		function keyPush(event){
  
                 switch (event.keyCode) {
-                    case 37: // Left
-                        vx = -vel;
-                        vy = 0;
+                    case 37:  // TECLA PARA ESQUERDA
+					velocidadeX = -velocidade;
+					velocidadeY = 0;
                         break;
-                    case 38: // up
-                        vx = 0;
-                        vy = -vel;
+                    case 38: // TECLA PRA CIMA
+					velocidadeX = 0;
+                        velocidadeY = -velocidade;
                         break;
-                    case 39: // right
-                        vx = vel;
-                        vy = 0;
+                    case 39: // TECLA PARA DIREITA
+					velocidadeX = velocidade;
+                        velocidadeY = 0;
                         break;
-                    case 40: // down
-                        vx = 0;
-                        vy = vel;
+                    case 40: // TECLA PARA BAIXO
+					velocidadeX = 0;
+                        velocidadeY = velocidade;
                         break;         
                     default:
                        
